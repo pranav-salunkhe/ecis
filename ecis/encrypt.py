@@ -394,7 +394,7 @@ def recover_image(b,g,r,iname):
     img[:,:,2] = r
     img[:,:,1] = g
     img[:,:,0] = b
-    cv2.imwrite(("enc.jpg"), img)
+    cv2.imwrite(("ecis/static/assets/enc.jpg"), img)
     print("saved ecrypted image as enc.jpg")
     return img
 
@@ -410,4 +410,4 @@ def decrypt(image,fx,fy,fz,fp,Mk,bt,gt,rt):
     img[:,:,0] = red
     img[:,:,1] = green
     img[:,:,2] = blue
-    cv2.imwrite(("Recovered.jpg"), img)
+    cv2.imwrite(("ecis/static/assets/Recovered.jpg"), img)

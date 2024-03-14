@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylized Image</title>
+    <link rel="icon" type="image/x-icon" href="../static/Logo.jpeg">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+@font-face {
+    font-family: ProductSans;
+    src: url('../static/ProductSansRegular.ttf');
+}
+*{
+    font-family: ProductSans;
+    color: white;
+}
+body{
+    background: #000000;
+  --gap: 5em;
+  --line: 1px;
+  --color: rgba(255, 255, 255, 0.2);
+
+  background-image: linear-gradient(
+      -90deg,
+      transparent calc(var(--gap) - var(--line)),
+      var(--color) calc(var(--gap) - var(--line) + 1px),
+      var(--color) var(--gap)
+    ),
+    linear-gradient(
+      0deg,
+      transparent calc(var(--gap) - var(--line)),
+      var(--color) calc(var(--gap) - var(--line) + 1px),
+      var(--color) var(--gap)
+    );
+  background-size: var(--gap) var(--gap);
+}
+.btn {
+    border: none;
+    width: 15em;
+    height: 5em;
+    border-radius: 3em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    background: #1C1A1C;
+    cursor: pointer;
+    transition: all 450ms ease-in-out;
+  }
+  
+  .sparkle {
+    fill: #AAAAAA;
+    transition: all 800ms ease;
+  }
+  
+  .text {
+    font-weight: 600;
+    color: #AAAAAA;
+    font-size: medium;
+  }
+  
+  .btn:hover {
+    background: linear-gradient(0deg,#A47CF3,#683FEA);
+    box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.4),
+    inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 4px rgba(255, 255, 255, 0.2),
+    0px 0px 180px 0px #9917FF;
+    transform: translateY(-2px);
+  }
+  
+  .btn:hover .text {
+    color: white;
+  }
+  
+  .btn:hover .sparkle {
+    fill: white;
+    transform: scale(1.2);
+  } 
+    </style>
+</head>
+<body>
+    <div class="flex flex-col justify-center items-center h-screen">
+        <p class="text-5xl m-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-red-400 to-red-600">Final Image</p>
+        <img src="../static/assets/enc.jpg" alt="Encrypted Image" class="">
+        <button class="btn mt-6" type="button" onclick="downloadImage()">
+            <span class="text">Download Image</span>
+        </button>
+        <a href="/" class="btn mt-4" style="text-decoration: none;">
+            <span class="text">Go Back</span>
+        </a>
+    </div>
+
+    <script>
+        function downloadImage() {
+            const imageSrc = document.querySelector('img').src;
+            const link = document.createElement('a');
+            link.href = imageSrc;
+            link.download = 'encrypted.jpg'; // Adjust the filename as needed
+            link.click();
+        }
+    </script>
+</body>
+</html>

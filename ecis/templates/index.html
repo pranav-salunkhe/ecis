@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECiS</title>
+    <link rel="icon" type="image/x-icon" href="../static/assets/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="../static/styles.css" rel="stylesheet">
+    <style>
+
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center">
+    <div class="py-8 w-full">
+        <div class="flex flex-row justify-between items-center w-full text-xl">
+            <img src="../static/assets/logo.png" alt="logo" class="h-16 w-16 ml-10 inline-block"/>
+            <h1 class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-red-400 to-red-600 text-white">ECiS: Encryption prior to compression for digital image security with reduced memory</h1>
+            <ul class="flex flex-row justify-center items-center w-56 justify-evenly text-xl">
+                <li><a href="#about">About</a></li>
+                <li><a href="#team">Team</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="h-screen">
+    <form id="imageForm" enctype="multipart/form-data" class="bg-white bg-opacity-40 backdrop-blur-2xl shadow-md rounded p-4 mb-4">
+        <div class="flex flex-row justify-center items-center ">
+            <div class="m-16">
+                <label class="block text-lg font-bold mb-2" for="content_image">
+                    Content Image
+                </label>
+                <input class="hidden" type="file" name="content_image" accept="image/*" required id="contentImageInput">
+                <div class="flex items-center">
+                    <label id="ci" for="contentImageInput" class="cursor-pointer hover:bg-blue-200 text-white font-bold p-24 rounded focus:outline-none focus:shadow-outline">
+                        <!-- Upload Content Image -->
+                        <img src="../static/upload.png" alt="Upload Content Image" class="h-28 w-28"/>
+                    </label>
+                    <span class="ml-2" id="contentImageName"></span>
+                    <div id="contentImagePreview" class="mt-2"></div>
+                </div>
+            </div>
+            <!-- <div class="m-16">
+                <label class="block text-lg font-bold mb-2" for="style_image">
+                    Style Image
+                </label>
+                <input class="hidden" type="file" name="style_image" accept="image/*" required id="styleImageInput">
+                <div class="flex items-center">
+                    <label id="si" for="styleImageInput" class="cursor-pointer hover:bg-blue-200 text-white font-bold p-24 rounded focus:outline-none focus:shadow-outline">
+                        
+                        <img src="../static/upload.png" alt="Upload Style Image" class="h-28 w-28"/>
+
+                    </label>
+                    <span class="ml-2" id="styleImageName"></span>
+                    <div id="styleImagePreview" class="mt-2"></div>
+                </div>
+            </div> -->
+        </div>
+        <div id="loaderContainer" class="flex flex-col items-center justify-between">
+            <!-- <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="uploadImages()">
+                Upload Images
+            </button> -->
+            <button class="btn" type="button" onclick="uploadImages()">
+                <svg height="24" width="24" fill="#FFFFFF" viewBox="0 0 24 24" data-name="Layer 1" id="Layer_1" class="sparkle">
+                    <path d="M10,21.236,6.755,14.745.264,11.5,6.755,8.255,10,1.764l3.245,6.491L19.736,11.5l-6.491,3.245ZM18,21l1.5,3L21,21l3-1.5L21,18l-1.5-3L18,18l-3,1.5ZM19.333,4.667,20.5,7l1.167-2.333L24,3.5,21.667,2.333,20.5,0,19.333,2.333,17,3.5Z"></path>
+                </svg>
+                <span class="text">Upload</span>
+            </button>
+            <!-- <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 m-4 rounded-x-full focus:outline-none focus:shadow-outline" type="button" style="display: none;" id="viewBtn" onclick="viewEncImage()">
+                View Image
+            </button> -->
+            <button class="btn mt-6" type="button" style="display: none;" id="viewBtn" onclick="viewEncImage()">
+                <span class="text">Encrypt Image</span>
+            </button>
+
+            <div id="newLoader" class="hidden newLoader">
+                <div class="box box-1">
+                    <div class="side-left"></div>
+                    <div class="side-right"></div>
+                    <div class="side-top"></div>
+                  </div>
+                  <div class="box box-2">
+                    <div class="side-left"></div>
+                    <div class="side-right"></div>
+                    <div class="side-top"></div>
+                  </div>
+                  <div class="box box-3">
+                    <div class="side-left"></div>
+                    <div class="side-right"></div>
+                    <div class="side-top"></div>
+                  </div>
+                  <div class="box box-4">
+                    <div class="side-left"></div>
+                    <div class="side-right"></div>
+                    <div class="side-top"></div>
+                  </div>
+            </div>
+        </div>
+    </form>
+    </div>
+    <div class="p-10 flex flex-col justify-center items-center">
+        <div>Encrypted Image</div>
+        <div>
+            <img id="encImg" src="../static/assets/enc.jpg" alt="encrypted image" class="p-16 hidden"/>
+        </div>
+        <div id="decr" class="hidden">
+            <button class="btn mt-6" type="button" onclick="viewDecrImage()">
+                <span class="text">Decrypt Image</span>
+            </button>
+        </div>
+    </div>
+    <div class="p-10 flex flex-col justify-center items-center">
+        <div>Decrypted Image</div>
+        <div>
+            <img id="decrImg" src="../static/assets/Recovered.jpg" alt="decrypted image" class="hidden"/>
+        </div>
+        <div id="comp" class="hidden">
+            <span>Compress Image</span>
+        </div>
+    </div>
+    <div class="flex flex-row mb-16 px-10 w-full">
+        <div id="about" class="flex flex-col px-10 w-1/2">
+            <p class="text-5xl px-5 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-red-400 to-red-600 ">What is ECiS?</p>
+            <p class="text-3xl mt-4 px-5 text-justify">
+                The performance of the current encryption techniques is
+                not satisfactory on the balancing point, at which both compression
+                efficiency and security are acceptable for the given scenarios.We 
+                implemented a joint encryption and compression method, namely,
+                ECiS, K. N. Singh et al. to solve the issues of security with bandwidth or the storage
+                space demand of digital images. To achieve high security, we encrypt
+                an image by using DNA, SHA-256, and a chaotic-based encryption
+                technique. To reduce the bandwidth or storage space demand, we also 
+                compress the encrypted image.
+            </p>
+        </div>
+
+        <div id="team" class="flex flex-col px-10 w-1/2">
+            <p class="text-5xl text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-red-400 to-red-600">Team</p>
+            <div class="text-3xl mt-4 flex flex-row justify-start items-start">
+                <div class="flex flex-col justify-center items-start">
+                    <ul>
+                        <li>Pranav Salunkhe | 211IT059</li>
+                        <li>Garvit Goyal | 211IT021</li>
+                        <li>Sanket Babar | 211IT015</li>
+                    </ul>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <script>
+        var d;
+        // const container = document.getElementById('loaderContainer');
+        const newLoader = document.getElementById('newLoader');
+        function uploadImages() {
+            // const loaderDiv = document.createElement('div');
+            // loaderDiv.classList.add('loader');
+            // container.appendChild(loaderDiv);
+            var form = document.getElementById('imageForm');
+            var formData = new FormData(form);
+            var btn = document.getElementById('viewBtn');
+            var encImg = document.getElementById('encImg');
+            var decrImg = document.getElementById('decrImg');
+            var decr = document.getElementById('decr');
+            var comp = document.getElementById('comp');
+            fetch('http://127.0.0.1:5000/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    d = data;
+                    btn.style.display = 'block';
+                    // loaderDiv.remove();
+                    newLoader.classList.add('hidden');
+
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function viewEncImage() {
+            newLoader.classList.remove('hidden');
+
+            if (d && d.status === 'success') {
+                // window.location.href = 'http://127.0.0.1:5000/encrypt'
+                fetch('http://127.0.0.1:5000/encrypt', {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    newLoader.classList.add('hidden');
+                    // loaderDiv.remove();
+                    if(data.status === 'success'){
+                        encImg.classList.remove('hidden');
+                        decr.classList.remove('hidden');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+                
+            }
+        }
+        function viewDecrImage() {
+            if (d && d.status === 'success') {
+                // window.location.href = 'http://127.0.0.1:5000/encrypt'
+                fetch('http://127.0.0.1:5000/decrypt', {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // loaderDiv.remove();
+                    if(data.status === 'success'){
+                        decrImg.classList.remove('hidden');
+                        // comp.classList.remove('hidden');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+                
+            }
+        }
+
+        // Show the selected image name and preview
+        document.getElementById('contentImageInput').addEventListener('change', function () {
+            displayImagePreview(this, 'contentImagePreview', 'contentImageName', 'ci');
+        });
+
+        document.getElementById('styleImageInput').addEventListener('change', function () {
+            displayImagePreview(this, 'styleImagePreview', 'styleImageName', 'si');
+        });
+
+        function displayImagePreview(input, previewId, nameId, oldID) {
+            var preview = document.getElementById(previewId);
+            var name = document.getElementById(nameId);
+            var old = document.getElementById(oldID);
+            var file = input.files[0];
+
+            if (file) {
+                // name.textContent = file.name;
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = new Image();
+                    img.src = e.target.result;
+                    img.classList.add('mt-2', 'h-60x', 'w-60');
+                    preview.innerHTML = '';
+                    preview.appendChild(img);
+                    old.classList.add('hidden');
+                }
+                reader.readAsDataURL(file);
+            } else {
+                name.textContent = '';
+                preview.innerHTML = '';
+            }
+        }
+    </script>
+</body>
+
+</html>
